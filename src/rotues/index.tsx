@@ -20,15 +20,15 @@ export const AppRouter = () => {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<Navigate to={"/404"} />} />
+          <Route
+            path="/dashboard"
+            element={
+              <AuthWrapper>
+                <HomePage />
+              </AuthWrapper>
+            }
+          ></Route>
         </Route>
-        <Route
-          path="/dashboard"
-          element={
-            <AuthWrapper>
-              <HomePage />
-            </AuthWrapper>
-          }
-        ></Route>
       </Routes>
     </Router>
   );

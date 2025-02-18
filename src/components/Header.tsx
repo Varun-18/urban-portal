@@ -7,12 +7,12 @@ export const Header = () => {
   return (
     <header className="bg-yellow-300">
       <div className="flex justify-between items-center py-2 mx-auto max-w-[1300px]">
-        <div className="">
+        <div onClick={() => navigate("/")} className="">
           <img src={svg} alt="Main logo" />
         </div>
         <div>
           <ul className="flex list-none gap-4">
-            <li onClick={() => navigate("/")}>home</li>
+            <li onClick={() => navigate("/dashboard")}>dashboard</li>
             <li onClick={() => navigate("/login")}>login</li>
             <li onClick={() => navigate("/signup")}>signup</li>
           </ul>
