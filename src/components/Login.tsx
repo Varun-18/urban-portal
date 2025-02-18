@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { API } from "../utils";
 import { UserLogin } from "../types";
 import { useNavigate } from "react-router-dom";
+import { userStore } from "../store";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const setUserDetails = userStore((state) => state.setUserDetails);
   const [formData, setFormData] = useState<UserLogin>({
     email: "",
     password: "",
@@ -12,8 +14,13 @@ export const Login = () => {
 
   const isAlreadyLoggedIn = async () => {
     try {
-      const data = await API.get({ url: "/user" });
-      console.log("🚀 ~ isAlreadyLoggedIn ~ data:", data);
+      const { user } = await API.get({ url: "/user" });
+      setUserDetails({
+        username: user.name,
+        email: user.email,
+        isLoggedIn: true,
+      });
+      console.log("🚀 ~ isAlreadyLoggedIn ~ user:", user);
       navigate("/dashboard");
     } catch (error) {
       console.log("🚀 ~ isAlreadyLoggedIn ~ error:", error);
@@ -22,7 +29,7 @@ export const Login = () => {
 
   useEffect(() => {
     isAlreadyLoggedIn();
-  });
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -32,6 +39,12 @@ export const Login = () => {
     event.preventDefault();
     try {
       await API.post({ url: "/user/login ", body: formData });
+      const { user } = await API.get({ url: "user" });
+      setUserDetails({
+        username: user.name,
+        email: user.email,
+        isLoggedIn: true,
+      });
       navigate("/dashboard");
     } catch (error) {
       console.log("🚀 ~ handleSubmit ~ error:", error);

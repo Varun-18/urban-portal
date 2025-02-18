@@ -1,20 +1,20 @@
 import { create } from "zustand";
 
 type UserData = {
-  username?: string | null;
+  name?: string | null;
   email?: string | null;
   isLoggedIn: boolean;
   setUserDetails: (data: {
-    username: string;
+    name: string;
     email: string;
     isLoggedIn: boolean;
   }) => void;
 };
 
 export const userStore = create<UserData>((set) => ({
-  username: null,
+  name: null,
   email: null,
   isLoggedIn: false,
-  setUserDetails: ({ username, email, isLoggedIn }) =>
-    set({ username, email, isLoggedIn }),
+  setUserDetails: ({ name, email, isLoggedIn }) =>
+    set({ name, email, isLoggedIn }),
 }));

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { API } from "../utils";
 import { useNavigate } from "react-router-dom";
 import { userStore } from "../store";
@@ -8,27 +8,31 @@ type ChildrenProps = {
 };
 
 export const AuthWrapper: React.FC<ChildrenProps> = ({ children }) => {
+  console.log("inside AuthWrapper");
   const { setUserDetails, isLoggedIn } = userStore((state) => state);
 
   const navigate = useNavigate();
 
   const authenticateUser = async () => {
     try {
-      const { data } = await API.get({ url: "/user" });
-      console.log("🚀 ~ authenticateUser ~ data:", data);
-      setUserDetails(data.user);
-      // setIsLogin(true);
+      const { user } = await API.get({ url: "/user" });
+      console.log("🚀 ~ authenticateUser ~ user:", user);
+      setUserDetails({ ...user, isLoggedIn: true });
     } catch (error) {
       console.log("🚀 ~ authenticateUser ~ error:", error);
+      console.log("before navigate");
       navigate("/login");
+      console.log("after navigate");
     }
   };
 
-  if (!isLoggedIn) {
-    authenticateUser();
-  }
-  // useEffect(() => {
-  // }, []);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      authenticateUser();
+    } else {
+      navigate("/dashboard");
+    }
+  }, []);
 
   if (isLoggedIn) {
     return <>{children}</>;
